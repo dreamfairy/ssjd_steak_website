@@ -19,6 +19,9 @@ package
 	
 	public class main extends Sprite
 	{
+		[Embed(source="../23950_pic0.jpg")]
+		private var m_bg : Class;
+		
 		public function main()
 		{
 			
@@ -39,6 +42,8 @@ package
 			controlLayer = new ControlLayer();
 			controlLayer.init(addChild(new Sprite()) as Sprite);
 			
+			addChild(new m_bg);
+			
 			indexLayer = new IndexLayer();
 			indexLayer.setBaseDir("./res/index/");
 			indexLayer.init(addChild(new Sprite()) as Sprite);
@@ -51,21 +56,31 @@ package
 			//管理密码:1234567
 			//http://www.dreamfairy.cn/test/zz/system.html
 			
-			/**
 			var loader:URLLoader = new URLLoader();  
-			var URLSt:URLRequest = new URLRequest("http://www.dreamfairy.cn/test/zz/savemsg.php");  
+//			var URLSt:URLRequest = new URLRequest("http://www.dreamfairy.cn/test/zz/savemsg.php");  
+			var URLSt:URLRequest = new URLRequest("http://www.dreamfairy.cn/test/zz/getList.php");  
 			URLSt.method = URLRequestMethod.POST;  
 			var values:URLVariables = new URLVariables();  
-			values.Name  = "超超";  
-			values.Content = "你大爷";  
+//			values.Name  = "超超";  
+//			values.Content = "你大爷";  
+			values.pwd = "1234567";
 			URLSt.data = values;  
 			loader.addEventListener(Event.COMPLETE, sendMsg);  
-			loader.load(URLSt);  **/
+			loader.load(URLSt);  	
 		} 
 		
 		protected function sendMsg(event:Event):void
 		{
-			trace("发送聊天成功",event.toString());
+			trace("发送聊天成功",event.toString(),event.target.data);
+			var data : String = JSON.parse(event.target.data) as String;
+			var target : Array =  JSON.parse(data) as Array;
+			for each(var msg : Object in target){
+				trace("Id",msg.Id);
+				trace("Name",msg.Name);
+				trace("CreateTime",msg.CreateTime);
+				trace("Content",msg.Content);
+				trace("--------");
+			}
 		}
 		
 		private var bgLayer : BgLayer;
