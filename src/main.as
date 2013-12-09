@@ -1,5 +1,6 @@
 package
 {
+	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
@@ -82,6 +83,8 @@ package
 				trace("--------");
 			}
 		}
+		
+		private var testSwf : MovieClip;
 		
 		private var bgLayer : BgLayer;
 		private var indexLayer : IndexLayer;

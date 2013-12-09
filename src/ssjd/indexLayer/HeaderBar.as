@@ -69,6 +69,14 @@ package ssjd.indexLayer
 			tweenImage(m_logo,  m_halfSceneW, 10);
 		}
 		
+		public function reset() : void
+		{
+			if(null == m_centerBtn) return;
+			
+			m_centerBtn.gotoAndPlay(1);
+			tweenImage(m_logo,  m_halfSceneW, 10);
+		}
+		
 		private function tweenImage(image : DisplayObject, x : int, y : int):void
 		{
 			m_root.addChild(image);

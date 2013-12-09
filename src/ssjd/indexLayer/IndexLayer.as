@@ -5,6 +5,8 @@ package ssjd.indexLayer
 	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.display.MovieClip;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
@@ -12,8 +14,6 @@ package ssjd.indexLayer
 	import flash.net.URLRequest;
 	import flash.system.ApplicationDomain;
 	import flash.system.LoaderContext;
-	import flash.text.TextField;
-	import flash.text.TextFormat;
 	import flash.utils.getDefinitionByName;
 	
 	import g1.common.loader.SWFLoader;
@@ -25,10 +25,15 @@ package ssjd.indexLayer
 		{
 		}
 		
+		private var m_testData : MovieClip;
+		private var m_testDataLayer : Sprite = new Sprite();
 		public function init(root : DisplayObjectContainer) : void
 		{
 			m_root = root;
-			m_HeaderBar.init(root);
+			m_root.addChild(m_testDataLayer);
+			m_root.addChild(m_rootLayer);
+			
+			m_HeaderBar.init(m_rootLayer);
 			
 			m_sceneW = 980;
 			m_sceneH = 760;
@@ -100,6 +105,42 @@ package ssjd.indexLayer
 		{
 			m_loadFolder = baseFolder;
 			m_HeaderBar.setBaseDir(baseFolder);
+			
+			var testLoader : SWFLoader = new SWFLoader();
+			testLoader.addEventListener(Event.COMPLETE, onLoadTest);
+			testLoader.load(new URLRequest(baseFolder + "content.swf"), new LoaderContext(false, ApplicationDomain.currentDomain));
+			function onLoadTest(e:Event) : void
+			{
+				m_testData = testLoader.getContent() as MovieClip;
+				m_testDataLayer.addEventListener(MouseEvent.CLICK, onClickTest);
+				m_testDataLayer.addChild(m_testData);
+				m_testDataLayer.visible = false;
+				
+				function onClickTest(e:MouseEvent) : void
+				{
+					m_testDataLayer.visible = false;
+					m_rootLayer.visible = true;
+					reset();
+				}
+			}
+		}
+		
+		public function reset() : void
+		{
+			m_HeaderBar.reset();
+			
+			var perDegree : int = 360 / m_numIcon;
+			for(var i : int = 0; i < m_iconList.length; i++)
+			{
+				var iconCache : IconCache = m_iconList[i];
+				iconCache.index = perDegree * (m_numIcon -  i);
+				iconCache.bg.alpha = 0;
+				//初始化按钮位置
+				iconCache.displayObject.x = m_halfSceneW + Math.sin(iconCache.index) * m_iconToCenterDis * 2 - m_iconToCenterDis;
+				iconCache.displayObject.y = m_halfSceneH+ Math.cos(iconCache.index) * m_iconToCenterDis * 2 - m_iconToCenterDis;
+				
+				TweenLite.from(iconCache.displayObject,  i/10 + 0.3 , {y : m_sceneH + 100,  delay : i * .05,  ease :  Back.easeOut ,onStart : onTweenStart, onStartParams : [iconCache], onComplete : onTweenOver, onCompleteParams: [iconCache,i]});
+			}
 		}
 		
 		private function onLoaded(e:Event) : void
@@ -172,12 +213,13 @@ package ssjd.indexLayer
 //				iconCache.displayObject.addChild(tf);
 				
 				iconCache.displayObject.name = i.toString();
+				iconCache.displayObject.mouseChildren = false;
 				
 				//初始化按钮位置
 				iconCache.displayObject.x = m_halfSceneW + Math.sin(iconCache.index) * m_iconToCenterDis * 2 - m_iconToCenterDis;
 				iconCache.displayObject.y = m_halfSceneH+ Math.cos(iconCache.index) * m_iconToCenterDis * 2 - m_iconToCenterDis;
 				
-				m_root.addChild(iconCache.displayObject);
+				m_rootLayer.addChild(iconCache.displayObject);
 				m_iconList[i] = iconCache;
 				
 				TweenLite.from(iconCache.displayObject,  i/10 + 0.3 , {y : m_sceneH + 100,  delay : i * .05,  ease :  Back.easeOut ,onStart : onTweenStart, onStartParams : [iconCache], onComplete : onTweenOver, onCompleteParams: [iconCache,i]});
@@ -210,6 +252,12 @@ package ssjd.indexLayer
 				case MouseEvent.CLICK:
 					m_needRotation = false;
 					createDropTween();
+					var frame : int = int(event.target.name) + 1;
+					if(m_testData){
+						m_testData.gotoAndStop(frame);
+						m_testDataLayer.visible = true;
+						m_rootLayer.visible = false;
+					}
 					break;
 				case MouseEvent.MOUSE_OUT:
 					createRotationTween();
@@ -253,6 +301,7 @@ package ssjd.indexLayer
 		private var m_iconOffsetX : Number = 222.8;
 		private var m_speed : Number;
 		private var m_config : XML;
+		private var m_rootLayer : Sprite = new Sprite();
 		
 		private var m_needRotation : Boolean = false;
 		private var m_isLoadIcon : Boolean = false;
