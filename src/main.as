@@ -25,7 +25,11 @@ package
 		
 		public function main()
 		{
-			
+			stage ? init() : addEventListener(Event.ADDED_TO_STAGE, init);
+		} 
+		
+		private function init(e:Event = null) : void
+		{
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
 			// 分为四层, 背景层，内容层，导航层，加载层
@@ -58,17 +62,17 @@ package
 			//http://www.dreamfairy.cn/test/zz/system.html
 			
 			var loader:URLLoader = new URLLoader();  
-//			var URLSt:URLRequest = new URLRequest("http://www.dreamfairy.cn/test/zz/savemsg.php");  
+			//			var URLSt:URLRequest = new URLRequest("http://www.dreamfairy.cn/test/zz/savemsg.php");  
 			var URLSt:URLRequest = new URLRequest("http://www.dreamfairy.cn/test/zz/getList.php");  
 			URLSt.method = URLRequestMethod.POST;  
 			var values:URLVariables = new URLVariables();  
-//			values.Name  = "超超";  
-//			values.Content = "你大爷";  
+			//			values.Name  = "超超";  
+			//			values.Content = "你大爷";  
 			values.pwd = "1234567";
 			URLSt.data = values;  
 			loader.addEventListener(Event.COMPLETE, sendMsg);  
 			loader.load(URLSt);  	
-		} 
+		}
 		
 		protected function sendMsg(event:Event):void
 		{

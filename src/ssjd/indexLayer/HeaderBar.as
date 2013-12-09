@@ -6,14 +6,7 @@ package ssjd.indexLayer
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
 	import flash.events.Event;
-	import flash.events.IOErrorEvent;
-	import flash.net.URLRequest;
-	import flash.system.ApplicationDomain;
-	import flash.system.LoaderContext;
-	import flash.utils.Dictionary;
 	import flash.utils.getDefinitionByName;
-	
-	import g1.common.loader.SWFLoader;
 
 	/**
 	 * 顶部的三个按钮
@@ -69,6 +62,16 @@ package ssjd.indexLayer
 			tweenImage(m_logo,  m_halfSceneW, 10);
 		}
 		
+		public function showSubMenu() : void
+		{
+			
+		}
+		
+		public function hideSubMenu() : void
+		{
+			
+		}
+		
 		public function reset() : void
 		{
 			if(null == m_centerBtn) return;
@@ -84,11 +87,6 @@ package ssjd.indexLayer
 			image.y = y;
 			image.alpha = 0;
 			TweenLite.to(image,1,{alpha : 1,delay : 1});
-		}
-		
-		public function showSubMenu() : void
-		{
-			
 		}
 		
 		private var m_root : DisplayObjectContainer;
