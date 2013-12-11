@@ -16,7 +16,7 @@ package
 	import ssjd.indexLayer.IndexLayer;
 	import ssjd.loadingLayer.LoadingLayer;
 	
-	[SWF(backgroundColor="#FFFFFF", frameRate="30", width="980", height="760")]
+	[SWF(backgroundColor="#FFFFFF", frameRate="30", width="1000", height="766")]
 	
 	public class main extends Sprite
 	{
@@ -47,10 +47,9 @@ package
 			controlLayer = new ControlLayer();
 			controlLayer.init(addChild(new Sprite()) as Sprite);
 			
-			addChild(new m_bg);
-			
 			indexLayer = new IndexLayer();
 			indexLayer.setBaseDir("./res/index/");
+			indexLayer.setContentLayer(contentLayer);
 			indexLayer.init(addChild(new Sprite()) as Sprite);
 			
 			loadingLayer = new LoadingLayer();

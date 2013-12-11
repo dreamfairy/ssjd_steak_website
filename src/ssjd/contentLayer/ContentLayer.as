@@ -31,7 +31,7 @@ package ssjd.contentLayer
 			contentInit();
 			
 			// test
-//			loadContent(MENU);
+			//loadContent(MENU);
 		}
 		
 		private function contentInit():void
